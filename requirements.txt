@@ -1,0 +1,4 @@
+apitools==0.1.4
+genson==0.2.0
+jsonschema==2.5.1
+PyYAML==3.12
