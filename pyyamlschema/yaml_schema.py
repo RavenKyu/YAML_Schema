@@ -50,10 +50,11 @@ class Yaml2JsonSchema:
         if buf is None:
             buf = dict()
         if not v:
-            buf.update(value)
+            buf.update({"properties": value})
             return buf
         name = v.pop(0)
         buf.update({"properties": {name: dict()}})
+
         return Yaml2JsonSchema.make_json_schema(
             v, value, buf["properties"][name])
 
@@ -92,20 +93,15 @@ class Yaml2JsonSchema:
             value = {Yaml2JsonSchema.cur: {name: value}}
             buf = dict()
             cs = copy.deepcopy(Yaml2JsonSchema.stack)
-            # if cs:
-            #     cs.pop(0)
-            # if not cs:
-            buf.update({"properties": dict()})
-            temp = buf['properties']
-            # else:
-            #     temp = buf
+            temp = buf
             Yaml2JsonSchema.make_json_schema(cs, value, temp)
             Yaml2JsonSchema.schemas.append(buf)
         else:
             d = d.strip()
             name = d[:d.find(":")]
-            cur = name
+            Yaml2JsonSchema.cur = name
         return Yaml2JsonSchema.yaml_extention_parser(v, depth)
+
 
 if __name__ == '__main__':
     import sys
