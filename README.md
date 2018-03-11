@@ -2,6 +2,11 @@
 PyYamlSchema 
 ## installation
 `pip install pyyamlschema`
+
+or
+
+`pip install git+https://github.com/RavenKyu/YAML_Schema.git
+`
 ## Usage
 ### Python Module
 ```python
