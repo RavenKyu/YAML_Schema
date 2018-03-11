@@ -3,6 +3,50 @@ import yaml as Yaml
 import json as Json
 import copy
 
+import sys
+import argparse
+
+
+def main():
+    args = parse_args()
+
+    conv = Yaml2JsonSchema(args.source_file)
+    if args.yaml:
+        sys.stdout.write(conv.yaml + '\n')
+    if args.json:
+        sys.stdout.write(conv.json + '\n')
+    if args.convert:
+        sys.stdout.write(conv.to_jsonschema() + '\n')
+    if args.extension:
+        dict_v = conv.yaml.split('\n')
+        conv.ex_yaml(dict_v)
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        prog=sys.argv[0],
+        description='This utility reads YAML file, '
+                    'Converts to JSON-Schema.')
+    parser.add_argument('source_file', help='source YAML file')
+    parser.add_argument(
+        '-y', '--yaml', help='print YAML format', action='store_true')
+    parser.add_argument(
+        '-j', '--json', help='convert a YAML file to Json format',
+        action='store_true')
+    parser.add_argument(
+        '-c', '--convert',
+        help='convert a YAML file to json-schema', action='store_true')
+    parser.add_argument(
+        '-e', '--extension',
+        help='convert a extended YAML file to json-schema', action='store_true')
+
+    args = parser.parse_args()
+
+    if not args.source_file:
+        sys.stderr.write("No Source File.")
+        exit(1)
+    return args
+
 
 class Yaml2JsonSchema:
     schemas = list()
@@ -102,40 +146,6 @@ class Yaml2JsonSchema:
             Yaml2JsonSchema.cur = name
         return Yaml2JsonSchema.yaml_extention_parser(v, depth)
 
-
-if __name__ == '__main__':
-    import sys
-    import argparse
-
-    parser = argparse.ArgumentParser(
-        prog=sys.argv[0],
-        description='This utility read YAML type of file, '
-                    'Converts to JsonSchema.')
-    parser.add_argument('source_file', help='source YAML file')
-    parser.add_argument(
-        '-y', '--yaml', help='print YAML format', action='store_true')
-    parser.add_argument(
-        '-j', '--json', help='convert a YAML file to Json format', action='store_true')
-    parser.add_argument(
-        '-c', '--convert',
-        help='convert a YAML file to json-schema', action='store_true')
-    parser.add_argument(
-        '-e', '--extension',
-        help='convert a extended YAML file to json-schema', action='store_true')
-
-    args = parser.parse_args()
-
-    conv = Yaml2JsonSchema(args.source_file)
-    if args.yaml:
-        sys.stdout.write(conv.yaml + '\n')
-    if args.json:
-        sys.stdout.write(conv.json + '\n')
-    if args.convert:
-        sys.stdout.write(conv.to_jsonschema() + '\n')
-    if args.extension:
-        dict_v = conv.yaml.split('\n')
-        conv.ex_yaml(dict_v)
-        # buf = yaml_extention_parser(dict_v)
 
 
 

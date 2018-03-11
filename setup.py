@@ -9,25 +9,30 @@ from setuptools import setup, find_packages
 reqs = [str(ir.req) for ir in install_reqs]
 
 setup(
-    name             = 'pyyamlschema',
-    version          = '0.9',
-    description      = 'Easy to Make JSON-Schema With YAML',
-    author           = 'Deokyu Lim',
-    author_email     = 'hong18s@gmail.com',
-    url              = 'https://github.com/RavenKyu/YAML_Schema',
-    download_url     = 'https://github.com/RavenKyu/YAML_Schema/archive/0.9.tar.gz',
-    install_requires = reqs,
-    packages         = find_packages(exclude = ['docs', 'tests*']),
-    keywords         = ['yaml', 'json', 'json-schema', 'converter', 'yaml-schema'],
-    python_requires  = '>=3',
-    package_data     = {},
+    name='pyyamlschema',
+    version='0.9',
+    description='Easy to Make JSON-Schema With YAML',
+    author='Deokyu Lim',
+    author_email='hong18s@gmail.com',
+    url='https://github.com/RavenKyu/YAML_Schema',
+    download_url='https://github.com/RavenKyu/YAML_Schema/archive/0.9.tar.gz',
+    install_requires=reqs,
+    packages=find_packages(exclude = ['docs', 'tests*']),
+    keywords=['yaml', 'json', 'json-schema', 'converter', 'yaml-schema'],
+    python_requires='>=3',
+    package_data={},
     zip_safe=False,
-    classifiers      = [
+    classifiers=[
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6'
-    ]
+    ],
+    entry_points={
+              'console_scripts': [
+                  'pyyamlschema = pyyamlschema.yaml_schema:main',
+              ],
+          },
 )
