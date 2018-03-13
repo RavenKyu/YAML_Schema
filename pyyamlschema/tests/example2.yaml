@@ -4,7 +4,7 @@ metadata:
   title: Test Scenario
   data_type: scenario
   email: hong18s@gmail.com
-  #! type: email
+  #! format: email
   cellphone: 010-9508-1234
   #! pattern: ^[01]{3}-[0-9]{4}-[0-9]{4}$
   age: 37
@@ -17,9 +17,8 @@ metadata:
     last_modified: 1520413079
 
   related_people:
-    author: Raven,
+    author: Raven
     last_modified_by: Jerry
-    #! type: string
 
   comment: >
     Auto connection for LinkedIn

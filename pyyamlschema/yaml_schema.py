@@ -1,4 +1,7 @@
 from genson import Schema
+from jsonschema import validate
+from jsonschema.exceptions import ValidationError
+
 import yaml as Yaml
 import json as Json
 import copy
@@ -18,8 +21,7 @@ def main():
     if args.convert:
         sys.stdout.write(conv.to_jsonschema() + '\n')
     if args.extension:
-        dict_v = conv.yaml.split('\n')
-        conv.ex_yaml(dict_v)
+        sys.stdout.write(conv.yaml_to_jsonschema() + "\n")
 
 
 def parse_args():
@@ -60,8 +62,24 @@ class Yaml2JsonSchema:
         if filename:
             self.open(filename)
 
+    def is_valid(self, value):
+        try:
+            validate(value, Json.loads(self.yaml_to_jsonschema()))
+            sys.stdout.write("OK\n")
+        except ValidationError as ve:
+            sys.stderr.write("Validation Error\n")
+            sys.stderr.write(str(ve) + "\n")
+            return False
+        return True
+
     def to_jsonschema(self):
         return self.__genson.to_json(indent=2)
+
+    def to_jsonloads(self):
+        return Json.loads(self.json)
+
+    def yaml_to_jsonschema(self):
+        return self.ex_yaml(self.yaml.split('\n'))
 
     @property
     def json(self):
@@ -87,7 +105,7 @@ class Yaml2JsonSchema:
         schema_list = Yaml2JsonSchema.yaml_extention_parser(v)
         for s in schema_list:
             self.__genson.add_schema(s)
-        print(self.to_jsonschema())
+        return self.to_jsonschema()
 
     @staticmethod
     def make_json_schema(v, value, buf=None):
@@ -134,6 +152,8 @@ class Yaml2JsonSchema:
             info = d.strip()[3:]
             name = info[:info.find(":")]
             value = info[info.find(":") + 2:]
+            if value.isdigit():
+                value = int(value) if value.isdecimal() else float(value)
             value = {Yaml2JsonSchema.cur: {name: value}}
             buf = dict()
             cs = copy.deepcopy(Yaml2JsonSchema.stack)
@@ -146,13 +166,8 @@ class Yaml2JsonSchema:
             Yaml2JsonSchema.cur = name
         return Yaml2JsonSchema.yaml_extention_parser(v, depth)
 
-
-
-
-
-
-
-
+if __name__ == "__main__":
+    main()
 
 
 
